@@ -11,14 +11,32 @@ object Main{
     //all of this will be done in functional style
     //--\\
 
-    println(createNeuronalNet([1, 2, 3]))
+    // val matrix: Array[Array[Float]] = createNeuronalNet(Array(1, 2, 3))
+
+    //type is actually : Array[Array[Float]] but not necessary
+    val matrix = matrixBuilder(Array(5, 2, 3))
+
+    println(matrix(0).mkString(" "))
 
   }
 
-  def createNeuronalNet(shape: Array[Int]): Array[Array[float]] = {
+  def matrixBuilder(shape: Array[Int]): Array[Array[Float]] = {
+    val rand = scala.util.Random
 
-    return [[0.5]]
+    def createRow(shape: Array[Int], net: Array[Array[Float]]): Array[Array[Float]] = {
+      def createColumn(s: Int, col: Array[Float]): Array[Float] = {
+        if(s == 0)
+          return col
 
+        return createColumn(s-1, col :+ rand.nextFloat)
+      }
+
+      if(shape.length == 0)
+        return net
+
+      return createRow(shape.tail, net :+ createColumn(shape.head, Array()))
+    }
+    return createRow(shape, Array())
   }
 
 }
